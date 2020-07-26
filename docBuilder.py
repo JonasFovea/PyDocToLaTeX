@@ -28,6 +28,22 @@ class Doc:
     def getFields(self):
         return self.fields
 
+    def buildFrame(self):
+        return "\section{" + self.name + "}\n"
+
+    def buildFields(self):
+        s = "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n"
+        s += "\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n"
+        for f in self.fields:
+            s += "\t" + f.getName() + " & " + f.getType() + " & " + f.getDescription() + " \\\\\\hline\n"
+        s += "\end{tabular}\n"
+        return s
+
+    def exportFile(self, fname):
+        content = self.buildFrame() + self.buildFields()
+        f = open(fname, "w")
+        f.write(content)
+        f.close()
 
 class Class:
     name = ""
@@ -85,6 +101,8 @@ class Function:
 
 class Field:
     type = "ANY"
+    description = ""
+
     def __init__(self, name=""):
         self.name = name
 
@@ -96,6 +114,12 @@ class Field:
 
     def getType(self):
         return self.type
+
+    def setDescription(self, desc: str):
+        self.description = desc
+
+    def getDescription(self):
+        return self.description
 
 
 class Parameter:

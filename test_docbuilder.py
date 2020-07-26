@@ -186,5 +186,36 @@ class MyTestCase(unittest.TestCase):
         tField.setType("int")
         self.assertEqual(tField.getType(), "int")
 
+    def test_FieldSetDescription(self):
+        tField = Field()
+        tField.setDescription("Description")
+
+    def test_FieldGetDescription(self):
+        tField = Field()
+        tField.setDescription("Description")
+        self.assertEqual(tField.getDescription(), "Description")
+
+    #===========Doc build tests===========
+    def test_DocBuildFrame(self):
+        tDoc = Doc("main.py")
+        self.assertEqual(tDoc.buildFrame(), "\section{main.py}\n")
+
+    def test_DocBuildFields(self):
+        tDoc = Doc("main.py")
+        tField = Field("x")
+        tField.setType("int")
+        tField.setDescription("Field stores the variable named x")
+        tDoc.addField(tField)
+        self.assertEqual(tDoc.buildFields(), "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n\tx & int & Field stores the variable named x \\\\\\hline\n\end{tabular}\n")
+
+    def test_DocExport(self):
+        tDoc = Doc("main.py")
+        tField = Field("x")
+        tField.setType("int")
+        tField.setDescription("Field stores the variable named x")
+        tDoc.addField(tField)
+        filename = "testfile.tex"
+        tDoc.exportFile(filename)
+
 if __name__ == '__main__':
     unittest.main()
