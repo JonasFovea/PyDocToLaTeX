@@ -39,9 +39,37 @@ class Doc:
         s += "\end{tabular}\n"
         return s
 
-    def exportFile(self, fname):
-        content = self.buildFrame() + self.buildFields()
-        f = open(fname, "w")
+    def buildClasses(self):
+        s = "\\subsection{Classes}\n"
+        for c in self.classes:
+            s += "\\subsubsection{" + c.getName() + "}\n"
+            s += "\\textbf{Fields}\\\\[0.5\\baselineskip]\n"
+            s += "\\begin{tabular}{|p{0.4\\linewidth}|p{0.1\\linewidth}|p{0.5\\linewidth}|}\\hline\n"
+            s += "\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n"
+            for field in c.getFields():
+                s += field.getName() + " & " + field.getType() + " & " + field.getDescription() + "\\\\\\hline\n"
+            s += "\\end{tabular}\\\\[\\baselineskip]\n"
+
+            s += "\\textbf{Functions}\\\\[0.5\\baselineskip]\n"
+            s += "\\begin{tabular}{|p{0.15\\linewidth}|p{0.35\\linewidth}|p{0.5\\linewidth}|}\\hline\n"
+            s += "\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\\hline\n"
+            for func in c.getFunctions():
+                s += func.getName() + " & \\begin{minipage}{\\textwidth}\\begin{itemize}"
+                for param in func.getParameters():
+                    s += "\\item " + param.getType() + " " + param.getName() + " :: " + param.getDescription() + " "
+                s += "\\end{itemize}\\end{minipage}"
+                s += " & " + func.getDescription() + "\\\\\\hline\n"
+            s += "\\end{tabular}\\\\\n"
+
+        return s
+
+    def exportFile(self, fileName):
+        content = self.buildFrame()
+        if len(self.fields) > 0:
+            content += self.buildFields()
+        if len(self.classes) > 0:
+            content += self.buildClasses()
+        f = open(fileName, "w")
         f.write(content)
         f.close()
 

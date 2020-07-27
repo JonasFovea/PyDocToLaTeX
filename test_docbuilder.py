@@ -209,7 +209,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(tDoc.buildFields(),
                          "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n\tx & int & Field stores the variable named x \\\\\\hline\n\end{tabular}\n")
 
-    def test_DocExport(self):
+    def test_DocExportFile(self):
         tDoc = Doc("main.py")
         tField = Field("x")
         tField.setType("int")
@@ -234,7 +234,7 @@ class MyTestCase(unittest.TestCase):
         tClass.addFunction(tFunc)
         tDoc.addClass(tClass)
 
-        self.assertEqual(tDoc.buildClasses(), "\subsection{Classes}\n\subsubsection{Testclass}\n\\textbf{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n \t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\hline\n\t Test Class Field & str & Field of a class in the documentation \\\\\hline\n\end{tabular}\n\\textbf{Functions}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\n\ttestFunc & int x :: Variable x & Function which processes x\\\\\hline\end{tabular}")
+        self.assertEqual(tDoc.buildClasses(), "\\subsection{Classes}\n\\subsubsection{Testclass}\n\\textbf{Fields}\\\\[0.5\\baselineskip]\n\\begin{tabular}{|p{0.4\\linewidth}|p{0.1\\linewidth}|p{0.5\\linewidth}|}\\hline\n\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\nClass Test Field & str & Field of a class in the documentation\\\\\\hline\n\\end{tabular}\\\\[\\baselineskip]\n\\textbf{Functions}\\\\[0.5\\baselineskip]\n\\begin{tabular}{|p{0.15\\linewidth}|p{0.35\\linewidth}|p{0.5\\linewidth}|}\\hline\n\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\\hline\ntestFunc & \\begin{minipage}{\\textwidth}\\begin{itemize}\\item int x :: Variable x \\end{itemize}\\end{minipage} & Function which processes x\\\\\\hline\n\\end{tabular}\\\\\n")
 
 if __name__ == '__main__':
     unittest.main()
