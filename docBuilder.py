@@ -45,6 +45,7 @@ class Doc:
         f.write(content)
         f.close()
 
+
 class Class:
     name = ""
     description = ""

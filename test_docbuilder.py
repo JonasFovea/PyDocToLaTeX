@@ -195,7 +195,7 @@ class MyTestCase(unittest.TestCase):
         tField.setDescription("Description")
         self.assertEqual(tField.getDescription(), "Description")
 
-    #===========Doc build tests===========
+    # ===========Doc build tests===========
     def test_DocBuildFrame(self):
         tDoc = Doc("main.py")
         self.assertEqual(tDoc.buildFrame(), "\section{main.py}\n")
@@ -206,7 +206,8 @@ class MyTestCase(unittest.TestCase):
         tField.setType("int")
         tField.setDescription("Field stores the variable named x")
         tDoc.addField(tField)
-        self.assertEqual(tDoc.buildFields(), "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n\tx & int & Field stores the variable named x \\\\\\hline\n\end{tabular}\n")
+        self.assertEqual(tDoc.buildFields(),
+                         "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n\tx & int & Field stores the variable named x \\\\\\hline\n\end{tabular}\n")
 
     def test_DocExport(self):
         tDoc = Doc("main.py")
@@ -216,6 +217,24 @@ class MyTestCase(unittest.TestCase):
         tDoc.addField(tField)
         filename = "testfile.tex"
         tDoc.exportFile(filename)
+
+    def test_DocBuildClasses(self):
+        tDoc = Doc("main.py")
+        tClass = Class("Testclass")
+        tField = Field("Class Test Field")
+        tField.setType("str")
+        tField.setDescription("Field of a class in the documentation")
+        tClass.addField(tField)
+        tFunc = Function("testFunc")
+        tFunc.setDescription("Function which processes x")
+        tParam = Parameter("x")
+        tParam.setType("int")
+        tParam.setDescription("Variable x")
+        tFunc.addParameter(tParam)
+        tClass.addFunction(tFunc)
+        tDoc.addClass(tClass)
+
+        self.assertEqual(tDoc.buildClasses(), "\subsection{Classes}\n\subsubsection{Testclass}\n\\textbf{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n \t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\hline\n\t Test Class Field & str & Field of a class in the documentation \\\\\hline\n\end{tabular}\n\\textbf{Functions}\n\\begin{tabular}{|l|l|l|}\hline\n\t\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\n\ttestFunc & int x :: Variable x & Function which processes x\\\\\hline\end{tabular}")
 
 if __name__ == '__main__':
     unittest.main()
