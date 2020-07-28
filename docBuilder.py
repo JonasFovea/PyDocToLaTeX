@@ -1,14 +1,21 @@
 class Doc:
     name = ""
+    description = ""
     classes = []
     functions = []
     fields = []
 
-    def __init__(self, name=None):
+    def __init__(self, name: str):
         self.name = name
 
     def getName(self):
         return self.name
+
+    def setDescription(self, desc: str):
+        self.description = desc
+
+    def getDescription(self):
+        return self.description
 
     def addClass(self, argClass):
         self.classes.append(argClass)
@@ -29,7 +36,9 @@ class Doc:
         return self.fields
 
     def buildFrame(self):
-        return "\section{" + self.name + "}\n"
+        if len(self.description) == 0:
+            return "\section{" + self.name + "}\n"
+        return "\section{" + self.name + "}\n" + self.description + "\n"
 
     def buildFields(self):
         s = "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n"

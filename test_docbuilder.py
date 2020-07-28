@@ -53,6 +53,15 @@ class MyTestCase(unittest.TestCase):
         tParam2 = Parameter("Parameter2")
         self.assertEqual(tParam2.getName(), "Parameter2")
 
+    def test_DocSetDescription(self):
+        tDoc = Doc("Documentation")
+        tDoc.setDescription("This is the description of the Documentation.")
+
+    def test_DocGetDescription(self):
+        tDoc = Doc("Documentation")
+        tDoc.setDescription("This is the description of the Documentation.")
+        self.assertEqual(tDoc.getDescription(), "This is the description of the Documentation.")
+
     def test_DocAddClass(self):
         tDoc = Doc()
         tDoc.addClass(Class("Test1"))
@@ -197,8 +206,11 @@ class MyTestCase(unittest.TestCase):
 
     # ===========Doc build tests===========
     def test_DocBuildFrame(self):
-        tDoc = Doc("main.py")
-        self.assertEqual(tDoc.buildFrame(), "\section{main.py}\n")
+        tDoc1 = Doc("main.py")
+        self.assertEqual(tDoc1.buildFrame(), "\section{main.py}\n")
+        tDoc2 = Doc("descriptiontest.py")
+        tDoc2.setDescription("Description text at the top of the file.")
+        self.assertEqual(tDoc2.buildFrame(), "\section{descriptiontest.py}\nDescription text at the top of the file.\n")
 
     def test_DocBuildFields(self):
         tDoc = Doc("main.py")
