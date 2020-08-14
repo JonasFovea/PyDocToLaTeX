@@ -16,7 +16,7 @@ class MyTestCase(unittest.TestCase):
         fn = "examplecode.py"
         cont = loadFileContent(fn)
         self.assertEqual(findFields(cont), [("a", "a is a variable"), ("varB", "varB is another variable"), ("V_ariable_C", "")])
-
+        self.assertEqual(findFields(""), None)
 
 if __name__ == '__main__':
     unittest.main()

@@ -33,6 +33,8 @@ def findFields(fileContent: str):
             if matchDescription:
                 fieldFound = (matchField.group(1), matchDescription.group(1))
             fields.append(fieldFound)
+    if not len(fields):
+        return  None
     return fields
 
 
