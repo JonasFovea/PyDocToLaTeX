@@ -2,7 +2,7 @@ import re
 
 FIELD_RE = re.compile(r'([a-zA-Z0-9_]*) = .*')
 DESCRIPTION_RE = re.compile(r'"""(.*)"""')
-FUNCTION_RE = re.compile(r'def ([a-zA-Z_]*)\(([a-zA-Z_,:]*){0,100}\):')
+FUNCTION_RE = re.compile(r'def (\w*)\((.*)\):')
 
 
 def loadFileContent(filename: str):
@@ -50,18 +50,17 @@ def findFunctions(fileContent: str):
             funcName = matchFunction.group(1)
             funcDescription = re.search(DESCRIPTION_RE, nextLine.strip()).group(1)
             funcParameters = matchFunction.group(2)
-            if len(funcParameters):
-                funcParameters = funcParameters.split(",")
-                for param in funcParameters:
-                    param = param.strip()
-                    if param.count(" : ") == 1:
-                        tempP = param.split(" : ")
-                        param = (tempP[0].strip(), tempP[1].strip())
+            paramList = []
+            if len(funcParameters) > 0:
+                for p in funcParameters.strip().split(","):
+                    tmpP = p.strip().split(":")
+                    if len(tmpP) == 2:
+                        paramList.append((tmpP[0].strip(), tmpP[1].strip()))
                     else:
-                        param = (param, "Any")
+                        paramList.append((tmpP[0].strip(), "Any"))
             else:
-                funcParameters = None
+                paramList = None
 
-            functions.append((funcName, funcDescription, funcParameters))
+            functions.append((funcName, funcDescription, paramList))
 
     return functions
