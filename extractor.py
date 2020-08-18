@@ -1,8 +1,9 @@
 import re
 
-FIELD_RE = re.compile(r'([a-zA-Z0-9_]*) = .*')
+FIELD_RE = re.compile(r'^([a-zA-Z0-9_]*) = .*')
 DESCRIPTION_RE = re.compile(r'"""(.*)"""')
-FUNCTION_RE = re.compile(r'def (\w*)\((.*)\):')
+FUNCTION_RE = re.compile(r'^def (\w+)\((.*)\):')
+CLASS_RE = re.compile(r'^class (\w+):')
 
 
 def loadFileContent(filename: str):
@@ -48,7 +49,7 @@ def findFunctions(fileContent: str):
         matchFunction = re.search(FUNCTION_RE, curLine)
         if matchFunction:
             funcName = matchFunction.group(1)
-            funcDescription = re.search(DESCRIPTION_RE, nextLine.strip()).group(1)
+            funcDescription = re.search(DESCRIPTION_RE, nextLine.rstrip()).group(1)
             funcParameters = matchFunction.group(2)
             paramList = []
             if len(funcParameters) > 0:
@@ -64,4 +65,36 @@ def findFunctions(fileContent: str):
             functions.append((funcName, funcDescription, paramList))
 
     return functions
+
+
+def findClasses(fileContent: str):
+    lines = fileContent.splitlines()
+    classes = []
+    classList = []
+    for i in range(len(lines)-1):
+        curLine = lines[i]
+        matchClass = re.search(CLASS_RE, curLine)
+        if matchClass:
+            classList.append(i)
+
+    for x in range(len(classList)):
+        cName = re.search(CLASS_RE, lines[classList[x]]).group(1)
+        cDescription = re.search(DESCRIPTION_RE, lines[classList[x]+1]).group(1)
+        start = classList[x]+1
+        if x < len(classList)-1:
+            end = classList[x+1]-1
+        else:
+            end = len(lines)-1
+
+        cBody = []
+        for line in lines[start:end]:
+            cBody.append(line.replace("    ", "", 1))
+
+        bodyString = "\n".join(cBody)
+
+        cFields = findFields(bodyString)
+        cFunctions = findFunctions(bodyString)
+        classes.append((cName, cDescription, cFields, cFunctions))
+
+    return  classes
 
