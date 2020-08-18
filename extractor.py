@@ -64,3 +64,4 @@ def findFunctions(fileContent: str):
             functions.append((funcName, funcDescription, paramList))
 
     return functions
+
