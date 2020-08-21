@@ -9,7 +9,6 @@ FILENAME_RE = re.compile(r'(\w+)\.py')
 def convert(fileName: str, override=False):
     name = re.search(FILENAME_RE, fileName).group(1)
     texName = name + ".tex"
-    
     if os.path.isfile(texName):
         if os.stat(texName) != 0 and not override:
             raise Exception("File already exists")
