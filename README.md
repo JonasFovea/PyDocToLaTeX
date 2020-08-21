@@ -3,6 +3,7 @@ Ziel des Projekts ist ein Programm, welches Python Docstrings oder sogar ganze P
 Die Aufteilung beläuft sich dabei vorerst im wesentlichen auf die beiden Skripte 'extractor.py' und 'docBuilder.py'.
 Diese beinhalten die folgenden Funktionalitäten (teilweise noch in Arbeit):
 
+----
 `extractor.py`
 => Bietet Funktionen zum Auslesen von Quellcode-Dateien und deren Separation in Variablen, Funktionen und Klassen
 * Einlesen von Dateien
