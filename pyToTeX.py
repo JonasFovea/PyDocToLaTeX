@@ -25,7 +25,7 @@ def convert(fileName: str, override=False):
 
         functions = findFunctions(content)
         for pyFunction in functions:
-            texFunction = Function(pyFunction[1])
+            texFunction = Function(pyFunction[0])
             texFunction.setDescription(pyFunction[1])
             if pyFunction[2]:
                 for param in pyFunction[2]:

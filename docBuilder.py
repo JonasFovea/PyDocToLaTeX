@@ -1,12 +1,11 @@
 class Doc:
-    name = ""
-    description = ""
-    classes = []
-    functions = []
-    fields = []
 
-    def __init__(self, name: str):
+    def __init__(self, name=""):
         self.name = name
+        self.description = ""
+        self.classes = []
+        self.functions = []
+        self.fields = []
 
     def getName(self):
         return self.name
@@ -44,8 +43,25 @@ class Doc:
         s = "\subsection{Fields}\n\\begin{tabular}{|l|l|l|}\hline\n"
         s += "\t\\textbf{name} & \\textbf{type} & \\textbf{description}\\\\\\hline\n"
         for f in self.fields:
-            s += "\t" + f.getName().replace("_","\\_") + " & " + f.getType() + " & " + f.getDescription() + " \\\\\\hline\n"
+            s += "\t" + f.getName().replace("_",
+                                            "\\_") + " & " + f.getType() + " & " + f.getDescription() + " \\\\\\hline\n"
         s += "\end{tabular}\n"
+        return s
+
+    def buildFunctions(self):
+        s = "\\subsection{Functions}\n\\begin{tabular}{|p{0.15\\linewidth}|p{0.35\\linewidth}|p{0.5\\linewidth}|}\\hline\n"
+        s += "\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\\hline\n"
+        for func in self.functions:
+            s += func.getName().replace("_", "\\_")
+            if not len(func.getParameters()) == 0:
+                s += " & \\begin{minipage}{\\textwidth}\\begin{itemize}"
+                for param in func.getParameters():
+                    s += "\\item " + param.getType() + " " + param.getName() + " :: " + param.getDescription() + " "
+                s += "\\end{itemize}\\end{minipage}"
+            else:
+                s += " & "
+            s += " & " + func.getDescription() + "\\\\\\hline\n"
+        s += "\\end{tabular}\\\\\n"
         return s
 
     def buildClasses(self):
@@ -63,7 +79,7 @@ class Doc:
             s += "\\begin{tabular}{|p{0.15\\linewidth}|p{0.35\\linewidth}|p{0.5\\linewidth}|}\\hline\n"
             s += "\\textbf{name} & \\textbf{parameters} & \\textbf{description}\\\\\\hline\n"
             for func in c.getFunctions():
-                s += func.getName().replace("_","\\_") + " & \\begin{minipage}{\\textwidth}\\begin{itemize}"
+                s += func.getName().replace("_", "\\_") + " & \\begin{minipage}{\\textwidth}\\begin{itemize}"
                 for param in func.getParameters():
                     s += "\\item " + param.getType() + " " + param.getName() + " :: " + param.getDescription() + " "
                 s += "\\end{itemize}\\end{minipage}"
@@ -76,6 +92,8 @@ class Doc:
         content = self.buildFrame()
         if len(self.fields) > 0:
             content += self.buildFields()
+        if len(self.functions) > 0:
+            content += self.buildFunctions()
         if len(self.classes) > 0:
             content += self.buildClasses()
         f = open(fileName, "w")
@@ -84,13 +102,12 @@ class Doc:
 
 
 class Class:
-    name = ""
-    description = ""
-    functions = []
-    fields = []
 
-    def __init__(self, name=None):
+    def __init__(self, name=""):
         self.name = name
+        self.description = ""
+        self.functions = []
+        self.fields = []
 
     def getName(self):
         return self.name
@@ -115,12 +132,10 @@ class Class:
 
 
 class Function:
-    description = None
-    parameters = []
-    name = ""
-
     def __init__(self, name=""):
         self.name = name
+        self.parameters = []
+        self.description = ""
 
     def getName(self):
         return self.name
@@ -139,11 +154,11 @@ class Function:
 
 
 class Field:
-    type = "ANY"
-    description = ""
 
     def __init__(self, name=""):
         self.name = name
+        self.type = "ANY"
+        self.description = ""
 
     def getName(self):
         return self.name
@@ -162,11 +177,11 @@ class Field:
 
 
 class Parameter:
-    description = ""
-    type = "ANY"
 
     def __init__(self, name=""):
         self.name = name
+        self.description = ""
+        self.type = "ANY"
 
     def getName(self):
         return self.name
