@@ -12,9 +12,11 @@ OVERRIDE_OPTION_RE = re.compile(r'-o$')
 def convert(fileName: str, override=False):
     name = re.search(FILENAME_RE, fileName).group(1)
     texName = name + ".tex"
-    if os.path.isfile(texName):
+    if os.path.exists(texName):
         if os.stat(texName) != 0 and not override:
             raise Exception("File already exists")
+    else:
+        raise Exception("File or path not found")
 
     with open(fileName, 'r') as sourceFile:
         content = sourceFile.read()
@@ -59,11 +61,12 @@ def convert(fileName: str, override=False):
         doc.exportFile(texName)
 
 
+
 if __name__ == '__main__':
     argv = sys.argv
     if len(argv) == 1:
         print(
-            "\tERROR: Please provide a path to a .py file, which you want to convert.\nAdditional option for overwriting existing .tex files: -o")
+            "\tERROR: Please provide a path to a .py file, which you want to convert.\n\tAdditional option for overwriting existing .tex files: -o")
     elif len(argv) == 2:
         if re.search(PATH_RE, argv[1].strip()):
             try:
