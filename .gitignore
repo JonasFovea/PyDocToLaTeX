@@ -7,3 +7,5 @@ testfile.tex
 /build/
 regex.txt
 examplecode.tex
+__pycache__/extractor.cpython-38.pyc
+__pycache__/docBuilder.cpython-38.pyc
